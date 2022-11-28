@@ -1,3 +1,7 @@
 .todos {
   list-style-type: none;
 }
+.clickable {
+  cursor: pointer;
+  font-size: 14px;
+}
