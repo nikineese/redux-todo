@@ -1,30 +1,35 @@
-import {Action} from "redux";
-import {EActionTypes, TActionModel} from "../actionTypes/actionTypes";
 import {TTodoModel} from "../types/types";
+import {createSlice} from "@reduxjs/toolkit";
 
-const initialState: TTodoModel[] = [];
+const initialState: {
+    todo: TTodoModel[]
+} = {
+    todo: []
+};
 
-const todoReducer = (state = initialState, action: Action) => {
-    const todoAction = action as TActionModel
-    let todos = state
-    switch (todoAction.type) {
-        case EActionTypes.ADD_TODO:
-            todos = [...todos, todoAction.payload]
-            break
-        case EActionTypes.REMOVE_TODO:
-            const deleteTargetIdx = todos.indexOf(todoAction.payload)
-            todos = todos.slice(0,deleteTargetIdx).concat(todos.slice(deleteTargetIdx + 1))
-            break
-        case EActionTypes.COMPLETE_TODO:
-            const targetTodo = todos.find(el => el.id === todoAction.payload)
+const todoSlice = createSlice( {
+    name: 'todo',
+    initialState,
+    reducers: {
+        addTodo: (state, action) => {
+            console.log(action.payload)
+            console.log(state)
+            state.todo = [...state.todo, action.payload]
+        },
+        removeTodo: (state, action) => {
+            state.todo = [
+                ...state.todo.slice(0, action.payload),
+                ...state.todo.slice(action.payload + 1)
+            ]
+        },
+        completeTodo: (state, action) => {
+            const targetTodo = state.todo.find(el => el.id === action.payload)
             if (targetTodo){
                 targetTodo.completed = !targetTodo.completed
-                todos = [...todos]
+                state.todo = [...state.todo]
             }
-            break
-        default:
-            return state;
+        }
     }
-    return todos
-};
-export default todoReducer
+})
+export const { addTodo, removeTodo, completeTodo } = todoSlice.actions
+export default todoSlice.reducer

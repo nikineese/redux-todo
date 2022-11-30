@@ -2,8 +2,8 @@ import React, {useState} from "react"
 import {TTodoModel} from "../types/types";
 import {CreateGUID} from "../utils/generateGuid";
 import { useDispatch } from "react-redux";
-import {addTodo, completeTodo, removeTodo} from "../actions/todoActions";
 import {useTodosState} from "../utils/gettingState";
+import {addTodo, completeTodo, removeTodo} from "../reducers/todoReducer";
 
 export const Todos = () => {
     const todos = useTodosState()
@@ -25,11 +25,11 @@ export const Todos = () => {
                 dispatch(addTodo({...newTodo, id: CreateGUID()}))
             }}>Add Todo</button>
             <ul>
-                {todos.map((todo) => (
+                {todos.map((todo, index) => (
                     <li style={{ textDecoration: todo.completed ? 'line-through' : '' }} key={todo.id}><span className='clickable' onClick={() => {
                         dispatch(completeTodo(todo.id))
                     }}>V</span> {todo.title} <span className='clickable' onClick={() => {
-                        dispatch(removeTodo(todo))
+                        dispatch(removeTodo(index))
                     }}>X</span></li>
                 ))}
             </ul>

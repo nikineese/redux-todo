@@ -1,7 +1,10 @@
-import {combineReducers, createStore} from "redux";
+import {configureStore} from "@reduxjs/toolkit";
 import todoReducer from "../reducers/todoReducer";
 
-const reducers = combineReducers({ todo: todoReducer })
-const store = createStore(reducers)
+const store = configureStore({
+    reducer: todoReducer,
+})
 
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 export default store
